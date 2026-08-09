@@ -924,27 +924,7 @@ export default function Home() {
                               </div>
                             )}
                           </div>
-
-                          <button
-                            type="button"
-                            onClick={(event) => {
-                              event.stopPropagation();
-
-                              setExpandedStockId(
-                                expandedStockId === stock.id
-                                  ? null
-                                  : stock.id
-                              );
-                            }}
-                            className="shrink-0 px-1 text-sm text-zinc-500"
-                            aria-label={
-                              expandedStockId === stock.id
-                                ? "상세 닫기"
-                                : "상세 열기"
-                            }
-                          >
-                            {expandedStockId === stock.id ? "▲" : "▼"}
-                          </button>
+                        
                           <button
                             type="button"
                             onClick={(event) => {
@@ -979,7 +959,7 @@ export default function Home() {
                         </div>
 
                         {/* 아래쪽: 상세 지표 */}
-                        {quote && expandedStockId === stock.id && (
+                        {quote && (
                           <>
                             <div className="ml-14 mt-3 grid grid-cols-3 gap-x-3 gap-y-2 text-xs">
                               <div>
