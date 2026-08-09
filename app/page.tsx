@@ -290,10 +290,6 @@ function getRecommendation(
     return "30% 매도 검토";
   }
 
-  if (quote.events.crossedAboveMa20) {
-    return "재매수 후보";
-  }
-
   /*
     이벤트가 없는 평상시에는 점수 기준
   */
@@ -657,7 +653,6 @@ export default function Home() {
 
   const recommendationOrder = [
     "비중 확대 후보",
-    "재매수 후보",
     "비중 확대 관찰",
     "관망",
     "비중 축소 관찰",
