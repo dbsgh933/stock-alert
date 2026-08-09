@@ -21,7 +21,7 @@ type StockQuote = {
   change: {
     d1: number | null;
     d5: number | null;
-     d10: number | null;
+    d10: number | null;
     d20: number | null;
     d60: number | null;
   };
@@ -920,7 +920,7 @@ export default function Home() {
                               </div>
                             )}
                           </div>
-                        
+
                           <button
                             type="button"
                             onClick={(event) => {
@@ -957,81 +957,106 @@ export default function Home() {
                         {/* 아래쪽: 상세 지표 */}
                         {quote && (
                           <>
-                            <div className="ml-14 mt-3 grid grid-cols-3 gap-x-3 gap-y-2 text-xs">
-                              <div>
-                                <span className="text-zinc-500">5D </span>
-                                <span className={changeColor(quote.change.d5)}>
-                                  {formatChange(quote.change.d5)}
-                                </span>
+                            <div className="ml-14 mt-3 text-xs">
+
+                              {/* 5D / 10D / 20D / 60D */}
+                              <div className="grid grid-cols-4 gap-2 border-b border-zinc-800 pb-3">
+                                {[
+                                  ["5D", quote.change.d5],
+                                  ["10D", quote.change.d10],
+                                  ["20D", quote.change.d20],
+                                  ["60D", quote.change.d60],
+                                ].map(([label, value]) => {
+                                  const numberValue = value as number | null;
+
+                                  return (
+                                    <div key={label as string} className="text-center">
+                                      <span className="text-zinc-500">
+                                        {label}
+                                      </span>
+
+                                      <span
+                                        className={`ml-1 font-semibold ${numberValue === null
+                                            ? "text-zinc-500"
+                                            : numberValue > 0
+                                              ? "text-red-400"
+                                              : numberValue < 0
+                                                ? "text-blue-400"
+                                                : "text-zinc-400"
+                                          }`}
+                                      >
+                                        {numberValue === null
+                                          ? "-"
+                                          : `${numberValue > 0 ? "+" : ""}${numberValue.toFixed(1)}%`}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
                               </div>
 
-                              <div>
-                                <span className="text-zinc-500">10D </span>
-                                <span className={changeColor(quote.change.d10)}>
-                                  {formatChange(quote.change.d10)}
-                                </span>
+
+                              {/* MA5 / MA10 / MA20 / MA60 */}
+                              <div className="mt-3 grid grid-cols-4 gap-2">
+
+                                {[
+                                  ["MA5", quote.ma.ma5],
+                                  ["MA10", quote.ma.ma10],
+                                  ["MA20", quote.ma.ma20],
+                                  ["MA60", quote.ma.ma60],
+                                ].map(([label, value]) => {
+                                  const maValue = value as number | null;
+
+                                  const isAbove =
+                                    maValue !== null &&
+                                    quote.price >= maValue;
+
+                                  return (
+                                    <div
+                                      key={label as string}
+                                      className="text-center"
+                                    >
+                                      <div className="text-zinc-500">
+                                        {label}
+                                      </div>
+
+                                      <div className="mt-1 whitespace-nowrap font-medium text-zinc-200">
+
+                                        {maValue !== null
+                                          ? maValue.toLocaleString(undefined, {
+                                            maximumFractionDigits:
+                                              stock.market === "US" ? 2 : 0,
+                                          })
+                                          : "-"}
+
+                                        {maValue !== null && (
+                                          <span
+                                            className={`ml-1 ${isAbove
+                                                ? "text-red-400"
+                                                : "text-blue-400"
+                                              }`}
+                                          >
+                                            {isAbove ? "▲" : "▼"}
+                                          </span>
+                                        )}
+
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+
                               </div>
 
-                              
 
-                              <div>
-                                <span className="text-zinc-500">20D </span>
-                                <span className={changeColor(quote.change.d20)}>
-                                  {formatChange(quote.change.d20)}
-                                </span>
-                              </div>
-
-                              <div>
-                                <span className="text-zinc-500">60D </span>
-                                <span className={changeColor(quote.change.d60)}>
-                                  {formatChange(quote.change.d60)}
-                                </span>
-                              </div>
-
-                              <div>
-                                <span className="text-zinc-500">MA20 </span>
-                                <span
-                                  className={
-                                    quote.ma.ma20 !== null &&
-                                      quote.price >= quote.ma.ma20
-                                      ? "text-green-400"
-                                      : "text-red-400"
-                                  }
-                                >
-                                  {quote.ma.ma20 === null
-                                    ? "-"
-                                    : quote.price >= quote.ma.ma20
-                                      ? "위"
-                                      : "아래"}
-                                </span>
-                              </div>
-
-                              <div>
-                                <span className="text-zinc-500">MA60 </span>
-                                <span
-                                  className={
-                                    quote.ma.ma60 !== null &&
-                                      quote.price >= quote.ma.ma60
-                                      ? "text-green-400"
-                                      : "text-red-400"
-                                  }
-                                >
-                                  {quote.ma.ma60 === null
-                                    ? "-"
-                                    : quote.price >= quote.ma.ma60
-                                      ? "위"
-                                      : "아래"}
-                                </span>
-                              </div>
-
-                              <div>
-                                <span className="text-zinc-500">VOL </span>
-                                <span className="text-zinc-300">
+                              {/* 거래량 */}
+                              <div className="mt-3 text-zinc-500">
+                                VOL{" "}
+                                <span className="font-medium text-zinc-300">
                                   {quote.volume.ratio !== null
                                     ? `${quote.volume.ratio.toFixed(1)}x`
                                     : "-"}
                                 </span>
                               </div>
+
                             </div>
 
                             <div className="ml-14 mt-3 flex items-center justify-between">
