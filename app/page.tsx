@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 type Market = "US" | "KR";
 
@@ -127,6 +129,15 @@ const stocks: Stock[] = [
 ];
 
 export default function Home() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+
+    router.push("/login");
+    router.refresh();
+  }
   const [activeTab, setActiveTab] =
     useState<Tab>("US_OWNED");
 
@@ -167,6 +178,14 @@ export default function Home() {
                 추세 기반 종목 관리
               </p>
             </div>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-xl border border-zinc-700 px-3 py-2 text-sm text-zinc-300"
+            >
+              로그아웃
+            </button>
 
             <button
               type="button"
