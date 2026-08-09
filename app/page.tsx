@@ -977,12 +977,12 @@ export default function Home() {
 
                                       <span
                                         className={`ml-1 font-semibold ${numberValue === null
-                                            ? "text-zinc-500"
-                                            : numberValue > 0
-                                              ? "text-red-400"
-                                              : numberValue < 0
-                                                ? "text-blue-400"
-                                                : "text-zinc-400"
+                                          ? "text-zinc-500"
+                                          : numberValue > 0
+                                            ? "text-red-400"
+                                            : numberValue < 0
+                                              ? "text-blue-400"
+                                              : "text-zinc-400"
                                           }`}
                                       >
                                         {numberValue === null
@@ -1031,8 +1031,8 @@ export default function Home() {
                                         {maValue !== null && (
                                           <span
                                             className={`ml-1 ${isAbove
-                                                ? "text-red-400"
-                                                : "text-blue-400"
+                                              ? "text-red-400"
+                                              : "text-blue-400"
                                               }`}
                                           >
                                             {isAbove ? "▲" : "▼"}
@@ -1045,7 +1045,7 @@ export default function Home() {
                                 })}
 
                               </div>
-                          
+
                             </div>
 
                             <div className="ml-14 mt-3 flex items-center justify-between">
@@ -1063,18 +1063,31 @@ export default function Home() {
                               </span>
 
                               {score !== null && grade && (
-                                <div className="text-sm font-semibold">
-                                  <span className="text-white">
-                                    {score}점
-                                  </span>
+                                <div className="flex items-center gap-4">
+                                  <div className="text-xs text-zinc-500">
+                                    VOL{" "}
+                                    <span className="font-medium text-zinc-300">
+                                      {quote.volume.ratio !== null
+                                        ? `${quote.volume.ratio.toFixed(1)}x`
+                                        : "-"}
+                                    </span>
+                                  </div>
 
-                                  <span className="ml-2 text-zinc-500">
-                                    ·
-                                  </span>
+                                  {score !== null && grade && (
+                                    <div className="text-sm font-semibold">
+                                      <span className="text-white">
+                                        {score}점
+                                      </span>
 
-                                  <span className="ml-2 text-green-400">
-                                    {grade}
-                                  </span>
+                                      <span className="ml-2 text-zinc-500">
+                                        ·
+                                      </span>
+
+                                      <span className="ml-2 text-green-400">
+                                        {grade}
+                                      </span>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
