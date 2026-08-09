@@ -865,89 +865,74 @@ export default function ChartPage() {
                     </div>
                 ) : (
                     <>
-                        <div className="mt-6">
+                        <div className="mt-4">
                             <div className="flex items-start justify-between">
                                 <div>
-                                    <div>
-                                        <div className="text-lg font-semibold">
-                                            {savedName || stockName}
-                                        </div>
-
-                                        <div className="mt-0.5 text-sm text-zinc-500">
-                                            {ticker}
-                                        </div>
+                                    <div className="text-lg font-semibold">
+                                        {savedName || stockName}
                                     </div>
 
-                                    <div className="mt-1 flex items-baseline gap-2">
-                                        <div className="text-3xl font-bold">
-                                            {currencySymbol}
-                                            {latest.close.toLocaleString(
-                                                isKoreanStock
-                                                    ? "ko-KR"
-                                                    : "en-US",
-                                                {
-                                                    maximumFractionDigits:
-                                                        isKoreanStock ? 0 : 2,
-                                                }
-                                            )}
-                                        </div>
-
-                                        {!isKoreanStock &&
-                                            usdKrw !== null && (
-                                                <div className="text-sm text-zinc-500">
-                                                    (
-                                                    ₩
-                                                    {Math.round(
-                                                        latest.close * usdKrw
-                                                    ).toLocaleString("ko-KR")}
-                                                    )
-                                                </div>
-                                            )}
+                                    <div className="mt-0.5 text-xs text-zinc-500">
+                                        {ticker}
                                     </div>
+                                </div>
+                            </div>
 
-                                    {changeAmount !== null &&
-                                        changePercent !== null && (
-                                            <div
-                                                className={`mt-1 text-sm font-medium ${changePercent > 0
-                                                    ? "text-red-400"
-                                                    : changePercent < 0
-                                                        ? "text-blue-400"
-                                                        : "text-zinc-400"
-                                                    }`}
-                                            >
-                                                {changeAmount > 0 ? "+" : ""}
-                                                {currencySymbol}
-                                                {Math.abs(changeAmount).toLocaleString(
-                                                    isKoreanStock
-                                                        ? "ko-KR"
-                                                        : "en-US",
-                                                    {
-                                                        maximumFractionDigits:
-                                                            isKoreanStock ? 0 : 2,
-                                                    }
-                                                )}
+                            <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                                <div className="text-2xl font-bold">
+                                    {currencySymbol}
+                                    {latest.close.toLocaleString(
+                                        isKoreanStock ? "ko-KR" : "en-US",
+                                        {
+                                            maximumFractionDigits:
+                                                isKoreanStock ? 0 : 2,
+                                        }
+                                    )}
+                                </div>
 
-                                                <span className="ml-2">
-                                                    {changePercent > 0 ? "+" : ""}
-                                                    {changePercent.toFixed(2)}%
-                                                </span>
-                                            </div>
-                                        )}
-                                    {periodChangePercent !== null && (
-                                        <div
-                                            className={`mt-2 text-sm font-semibold ${periodChangePercent > 0
+                                {!isKoreanStock && usdKrw !== null && (
+                                    <div className="text-sm text-zinc-500">
+                                        (
+                                        ₩
+                                        {Math.round(
+                                            latest.close * usdKrw
+                                        ).toLocaleString("ko-KR")}
+                                        )
+                                    </div>
+                                )}
+
+                                {changePercent !== null && (
+                                    <div
+                                        className={`text-sm font-semibold ${changePercent > 0
                                                 ? "text-red-400"
-                                                : periodChangePercent < 0
+                                                : changePercent < 0
                                                     ? "text-blue-400"
                                                     : "text-zinc-400"
+                                            }`}
+                                    >
+                                        {changePercent > 0 ? "+" : ""}
+                                        {changePercent.toFixed(2)}%
+                                    </div>
+                                )}
+
+                                {periodChangePercent !== null && (
+                                    <>
+                                        <span className="text-zinc-600">·</span>
+
+                                        <div
+                                            className={`text-sm font-semibold ${periodChangePercent > 0
+                                                    ? "text-red-400"
+                                                    : periodChangePercent < 0
+                                                        ? "text-blue-400"
+                                                        : "text-zinc-400"
                                                 }`}
                                         >
-                                            {periodLabel} 수익률{" "}
+                                            {periodLabel}{" "}
                                             {periodChangePercent > 0 ? "+" : ""}
                                             {periodChangePercent.toFixed(2)}%
                                         </div>
-                                    )}
-                                </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
