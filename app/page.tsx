@@ -21,6 +21,7 @@ type StockQuote = {
   change: {
     d1: number | null;
     d5: number | null;
+     d10: number | null;
     d20: number | null;
     d60: number | null;
   };
@@ -968,6 +969,15 @@ export default function Home() {
                                   {formatChange(quote.change.d5)}
                                 </span>
                               </div>
+
+                              <div>
+                                <span className="text-zinc-500">10D </span>
+                                <span className={changeColor(quote.change.d10)}>
+                                  {formatChange(quote.change.d10)}
+                                </span>
+                              </div>
+
+                              
 
                               <div>
                                 <span className="text-zinc-500">20D </span>

@@ -242,6 +242,11 @@ export async function GET(
             getPreviousClose(closes, 5)
         );
 
+        const change10D = percentChange(
+            price,
+            getPreviousClose(closes, 10)
+        );
+
         const change20D = percentChange(
             price,
             getPreviousClose(closes, 20)
@@ -404,6 +409,7 @@ export async function GET(
             change: {
                 d1: change1D,
                 d5: change5D,
+                d10: change10D,
                 d20: change20D,
                 d60: change60D,
             },
