@@ -188,6 +188,9 @@ export default function ChartPage() {
 
     const router = useRouter();
 
+    const [usdKrw, setUsdKrw] =
+        useState<number | null>(null);
+
     const searchParams = useSearchParams();
 
     const savedName =
@@ -284,6 +287,35 @@ export default function ChartPage() {
 
         void loadChart();
     }, [ticker]);
+
+    useEffect(() => {
+        async function loadExchangeRate() {
+            try {
+                const response = await fetch(
+                    "/api/exchange-rate",
+                    {
+                        cache: "no-store",
+                    }
+                );
+
+                const result = await response.json();
+
+                if (
+                    response.ok &&
+                    typeof result.rate === "number"
+                ) {
+                    setUsdKrw(result.rate);
+                }
+            } catch (error) {
+                console.error(
+                    "환율 조회 실패:",
+                    error
+                );
+            }
+        }
+
+        void loadExchangeRate();
+    }, []);
 
     useEffect(() => {
         if (
@@ -846,15 +878,31 @@ export default function ChartPage() {
                                         </div>
                                     </div>
 
-                                    <div className="mt-1 text-3xl font-bold">
-                                        {currencySymbol}
-                                        {latest.close.toLocaleString(
-                                            isKoreanStock ? "ko-KR" : "en-US",
-                                            {
-                                                maximumFractionDigits:
-                                                    isKoreanStock ? 0 : 2,
-                                            }
-                                        )}
+                                    <div className="mt-1 flex items-baseline gap-2">
+                                        <div className="text-3xl font-bold">
+                                            {currencySymbol}
+                                            {latest.close.toLocaleString(
+                                                isKoreanStock
+                                                    ? "ko-KR"
+                                                    : "en-US",
+                                                {
+                                                    maximumFractionDigits:
+                                                        isKoreanStock ? 0 : 2,
+                                                }
+                                            )}
+                                        </div>
+
+                                        {!isKoreanStock &&
+                                            usdKrw !== null && (
+                                                <div className="text-sm text-zinc-500">
+                                                    (
+                                                    ₩
+                                                    {Math.round(
+                                                        latest.close * usdKrw
+                                                    ).toLocaleString("ko-KR")}
+                                                    )
+                                                </div>
+                                            )}
                                     </div>
 
                                     {changeAmount !== null &&
@@ -888,10 +936,10 @@ export default function ChartPage() {
                                     {periodChangePercent !== null && (
                                         <div
                                             className={`mt-2 text-sm font-semibold ${periodChangePercent > 0
-                                                    ? "text-red-400"
-                                                    : periodChangePercent < 0
-                                                        ? "text-blue-400"
-                                                        : "text-zinc-400"
+                                                ? "text-red-400"
+                                                : periodChangePercent < 0
+                                                    ? "text-blue-400"
+                                                    : "text-zinc-400"
                                                 }`}
                                         >
                                             {periodLabel} 수익률{" "}

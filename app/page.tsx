@@ -315,6 +315,8 @@ function getRecommendation(
 export default function Home() {
   const router = useRouter();
   const supabase = createClient();
+  const [usdKrw, setUsdKrw] =
+  useState<number | null>(null);
 
   const [activeTab, setActiveTab] =
     useState<Tab>("US_OWNED");
@@ -484,6 +486,35 @@ export default function Home() {
 
   useEffect(() => {
     void loadStocks();
+  }, []);
+
+  useEffect(() => {
+    async function loadExchangeRate() {
+      try {
+        const response = await fetch(
+          "/api/exchange-rate",
+          {
+            cache: "no-store",
+          }
+        );
+
+        const result = await response.json();
+
+        if (
+          response.ok &&
+          typeof result.rate === "number"
+        ) {
+          setUsdKrw(result.rate);
+        }
+      } catch (error) {
+        console.error(
+          "환율 조회 실패:",
+          error
+        );
+      }
+    }
+
+    void loadExchangeRate();
   }, []);
 
   async function handleLogout() {
@@ -895,6 +926,7 @@ export default function Home() {
                               <>
                                 <div className="text-sm font-medium text-white">
                                   {stock.market === "US" ? "$" : "₩"}
+
                                   {quote.price.toLocaleString(
                                     stock.market === "US"
                                       ? "en-US"
@@ -904,6 +936,18 @@ export default function Home() {
                                         stock.market === "US" ? 2 : 0,
                                     }
                                   )}
+
+                                  {stock.market === "US" &&
+                                    usdKrw !== null && (
+                                      <span className="ml-1 text-xs font-normal text-zinc-500">
+                                        (
+                                        ₩
+                                        {Math.round(
+                                          quote.price * usdKrw
+                                        ).toLocaleString("ko-KR")}
+                                        )
+                                      </span>
+                                    )}
                                 </div>
 
                                 <div
