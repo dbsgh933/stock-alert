@@ -1045,18 +1045,7 @@ export default function Home() {
                                 })}
 
                               </div>
-
-
-                              {/* 거래량 */}
-                              <div className="mt-3 text-zinc-500">
-                                VOL{" "}
-                                <span className="font-medium text-zinc-300">
-                                  {quote.volume.ratio !== null
-                                    ? `${quote.volume.ratio.toFixed(1)}x`
-                                    : "-"}
-                                </span>
-                              </div>
-
+                          
                             </div>
 
                             <div className="ml-14 mt-3 flex items-center justify-between">
