@@ -348,7 +348,7 @@ export default function ChartPage() {
 
                     wickUpColor: "#ef4444",
                     wickDownColor: "#3b82f6",
-                      
+
                     priceFormat,
                 },
                 0
@@ -709,6 +709,36 @@ export default function ChartPage() {
             ? latest.close - previous.close
             : null;
 
+    const periodCount =
+        period === "1M"
+            ? 22
+            : period === "3M"
+                ? 66
+                : period === "6M"
+                    ? 132
+                    : 260;
+
+    const periodStartIndex =
+        Math.max(0, data.length - periodCount);
+
+    const periodStart =
+        data[periodStartIndex];
+
+    const periodChangePercent =
+        latest && periodStart
+            ? ((latest.close - periodStart.close) /
+                periodStart.close) *
+            100
+            : null;
+
+    const periodLabel =
+        period === "1M"
+            ? "1개월"
+            : period === "3M"
+                ? "3개월"
+                : period === "6M"
+                    ? "6개월"
+                    : "1년";
     const isKoreanStock =
         ticker.endsWith(".KS") ||
         ticker.endsWith(".KQ");
@@ -855,6 +885,20 @@ export default function ChartPage() {
                                                 </span>
                                             </div>
                                         )}
+                                    {periodChangePercent !== null && (
+                                        <div
+                                            className={`mt-2 text-sm font-semibold ${periodChangePercent > 0
+                                                    ? "text-red-400"
+                                                    : periodChangePercent < 0
+                                                        ? "text-blue-400"
+                                                        : "text-zinc-400"
+                                                }`}
+                                        >
+                                            {periodLabel} 수익률{" "}
+                                            {periodChangePercent > 0 ? "+" : ""}
+                                            {periodChangePercent.toFixed(2)}%
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
